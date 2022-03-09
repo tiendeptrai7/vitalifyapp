@@ -41,17 +41,7 @@ class _LoginScreenState extends State<LoginScreen> {
     String username = _usernameController.text;
     String password = _passwordController.text;
     if (username.isEmpty || password.isEmpty) {
-      /*ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Processing Data')),
-      );*/
-      // Toastr.error(
-      //   context: context,
-      //   child: const Text(
-      //     "Vui lòng nhập đầy đủ thông tin",
-      //     style: TextStyle(fontSize: 15, color: Colors.white),
-      //   ),
-      //   alignment: Alignment.topRight,
-      // );
+      print('lỗi');
     } else {
       print('test Login');
       if (username == 'sss' && password == '123') {

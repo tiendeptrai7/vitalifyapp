@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'homepage.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -14,6 +16,7 @@ class HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      body: const TodoScreen(),
       bottomNavigationBar: Container(
         margin: const EdgeInsets.all(20),
         height: size.width * .155,
