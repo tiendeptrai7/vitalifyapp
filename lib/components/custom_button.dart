@@ -20,7 +20,7 @@ class AuthButton extends StatelessWidget {
         margin: const EdgeInsets.only(left: 20, right: 20),
         decoration: const BoxDecoration(
             color: Colors.redAccent,
-            borderRadius: BorderRadius.all(const Radius.circular(15))),
+            borderRadius: BorderRadius.all( Radius.circular(15))),
         child: Center(
           child: Text(
             text,
