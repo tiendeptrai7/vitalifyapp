@@ -1,3 +1,4 @@
+
 import 'package:mobx/mobx.dart';
 
 import 'todo.dart';
@@ -16,7 +17,7 @@ abstract class _Todo_list with Store {
   @action
   void initTodos() {
     for (var i = 0; i < 10; i++) {
-      todos.add(Todo("Task - " + i.toString()));
+      todos.add(Todo("Task - " + i.toString(),false));
     }
   }
 
@@ -26,7 +27,13 @@ abstract class _Todo_list with Store {
   }
 
   @action
-  addTodo(String des) {
-    todos.add(Todo(des));
+  addTodo(String des,bool d) {
+    todos.add(Todo(des,d));
+  }
+
+  @action
+  updateTodo(int index, String des, bool d) {
+    todos[index].description = des;
+    todos[index].done = d;
   }
 }
