@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:mobx/mobx.dart';
-import 'mobx/todo_list.dart';
+import 'package:vitalifyapp/store/todo_list.dart';
+
 
 class TodoScreen extends StatefulWidget {
   const TodoScreen({Key? key}) : super(key: key);
@@ -84,7 +85,7 @@ class _TodoState extends State<TodoScreen> {
           onLongPress: () => deleteDialog(i),
           onTap:  () => updateDialog(
               done: todo_list!.todos[i].done,
-              desc: todo_list!.todos[i].description,
+              des: todo_list!.todos[i].description,
               index: i),
         );
       } else {
@@ -102,7 +103,7 @@ class _TodoState extends State<TodoScreen> {
           onLongPress: () => addDialog(),
           onTap:  () => updateDialog(
               done: todo_list!.todos[i].done,
-              desc: todo_list!.todos[i].description,
+              des: todo_list!.todos[i].description,
               index: i),
         );
       }
@@ -146,8 +147,6 @@ class _TodoState extends State<TodoScreen> {
                     ],
                   ),
                   actions: [
-
-
                     const SizedBox(
                       height: 5,
                     ),
@@ -174,8 +173,8 @@ class _TodoState extends State<TodoScreen> {
   @action
 
   updateDialog(
-      {bool done = false, String desc = "", int index = -1}) {
-    desTextController.text = desc;
+      {bool done = false, required String des , required int index }) {
+    desTextController.text = des;
     showDialog<void>(
       context: context,
       builder: (BuildContext context) => AlertDialog(
