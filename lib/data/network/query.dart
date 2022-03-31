@@ -1,6 +1,4 @@
-
-  String loginQuery =
-   """
+String loginQuery = """
  mutation login (\$input:LoginCondition!) {
       login(condition:\$input) {
         token
@@ -15,8 +13,7 @@
 }
   """;
 
-String  checkQuery =
-"""
+String checkQuery = """
 mutation createActivity(\$input: CreateActivityCondition!) {
   createActivity(condition: \$input) {
     requestResolved
@@ -28,9 +25,24 @@ mutation createActivity(\$input: CreateActivityCondition!) {
 
 """;
 
-
-
-
+String myTimeLine = """
+  query myTimeLine(\$input: MyTimeLineCondition) {
+    myTimeLine(condition: \$input) {
+      response {
+        groupDate
+        collections {
+          activityTypes
+          activityDescription
+        }
+      }
+      error {
+        requestResolved
+        message
+        errorCode
+      }
+    }
+  }
+  """;
 
 String registerQuery(
     String lastname,
@@ -55,7 +67,6 @@ String registerQuery(
 }""";
 }
 
-
 getUser() {
   return """{
   user(id:1){
@@ -66,4 +77,3 @@ getUser() {
   }
 }""";
 }
-

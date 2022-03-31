@@ -5,6 +5,10 @@ import 'package:intl/intl.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:vitalifyapp/data/network/graphqlclients.dart';
 import 'package:vitalifyapp/data/network/query.dart';
+import 'package:fab_circular_menu/fab_circular_menu.dart';
+import '../constants.dart';
+import 'hometodo.dart';
+import 'my_time_line_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -15,45 +19,114 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
+  final GlobalKey<FabCircularMenuState> fabKey = GlobalKey();
   DateFormat dateFormat = DateFormat("EEEE, dd MMMM yyyy");
   DateTime now = DateTime.now();
   late String today = dateFormat.format(now);
-
-
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-          key: _scaffoldKey,
-          body: Container(
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: borderRadius(20.0, 20.0, 0.0, 0.0),
+        key: _scaffoldKey,
+        body: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: borderRadius(20.0, 20.0, 0.0, 0.0),
+          ),
+          child: Column(
+            children: <Widget>[
+              const SizedBox(
+                height: 30,
               ),
-              child: Column(
-                children: <Widget>[
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  _buildTextApp(),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  _buildTextTime(),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  _buildBody(),
-                ],
+              _buildTextApp(),
+              const SizedBox(
+                height: 20,
               ),
-            ),
-          )),
+              _buildTextTime(),
+              const SizedBox(
+                height: 10,
+              ),
+              _buildBody(),
+            ],
+          ),
+        ),
+        floatingActionButton: Builder(
+          builder: (context) => FabCircularMenu(
+            key: fabKey,
+            // Cannot be Alignment.center
+            alignment: Alignment.bottomRight,
+            ringColor: Colors.white.withAlpha(25),
+            ringDiameter: 500.0,
+            ringWidth: 150.0,
+            fabSize: 64.0,
+            fabElevation: 8.0,
+            fabIconBorder: const CircleBorder(),
+            fabColor: Colors.white,
+            fabOpenIcon: Icon(Icons.menu, color: primaryColor2),
+            fabCloseIcon: Icon(Icons.close, color: primaryColor2),
+            fabMargin: const EdgeInsets.all(16.0),
+            animationDuration: const Duration(milliseconds: 800),
+            animationCurve: Curves.easeInOutCirc,
+            onDisplayChange: (isOpen) {
+              _showSnackBar(
+                  context, "The menu is ${isOpen ? "open" : "closed"}");
+            },
+            children: <Widget>[
+              RawMaterialButton(
+                onPressed: () {
+                  _showSnackBar(context, "You pressed 1");
+                  Navigator.pushReplacement(
+                      context, MaterialPageRoute(builder: (context) => const MyTimeLineScreen()));
+                },
+                shape: const CircleBorder(),
+                padding: const EdgeInsets.all(24.0),
+                child: const Icon(Icons.menu, color: Colors.cyan),
+              ),
+              RawMaterialButton(
+                onPressed: () {
+                  _showSnackBar(context, "You pressed 2");
+                  Navigator.pushReplacement(
+                      context, MaterialPageRoute(builder: (context) => const TodoScreen()));
+                },
+                shape: const CircleBorder(),
+                padding: const EdgeInsets.all(24.0),
+                child: const Icon(Icons.menu, color: Colors.cyan),
+              ),
+              RawMaterialButton(
+                onPressed: () {
+                  _showSnackBar(context, "You pressed 3");
+                },
+                shape: const CircleBorder(),
+                padding: const EdgeInsets.all(24.0),
+                child: const Icon(Icons.menu, color: Colors.cyan),
+              ),
+              RawMaterialButton(
+                onPressed: () {
+                  _showSnackBar(context,
+                      "You pressed 4. This one closes the menu on tap");
+                  fabKey.currentState!.close();
+                },
+                shape: const CircleBorder(),
+                padding: const EdgeInsets.all(24.0),
+                child: const Icon(Icons.menu, color: Colors.cyan),
+              )
+            ],
+          ),
+        ),
+      ),
     );
   }
 
+  void _showSnackBar(BuildContext context, String message) {
+    Scaffold.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.cyan,
+          content: Text(message),
+          duration: const Duration(milliseconds: 1000),
+        )
+    );
+  }
   //build text time
   Widget _buildTextTime() {
     return Container(
@@ -101,34 +174,29 @@ class _MainScreenState extends State<MainScreen> {
               variables: {
                 "input": {"activityTypes": "CHECK_IN"}
               },
-              onCompleted: (dynamic resultData) {
-                print(resultData);
-              },
+              onCompleted: (dynamic resultData) {},
             ));
             final productlist = result.data?['createActivity'];
             String? mess = productlist['message'];
-            if(result.data != null){
+            if (result.data != null) {
               AwesomeDialog(
                 context: context,
                 dialogType: DialogType.SUCCES,
                 animType: AnimType.RIGHSLIDE,
                 headerAnimationLoop: true,
-                title: 'CHECK IN SUCCES',
-                desc:
-                mess,
+                title: 'CHECK IN ',
+                desc: mess,
                 btnOkOnPress: () {},
                 btnOkColor: Colors.green,
               ).show();
-
-            }else{
+            } else {
               AwesomeDialog(
                 context: context,
                 dialogType: DialogType.ERROR,
                 animType: AnimType.RIGHSLIDE,
                 headerAnimationLoop: true,
                 title: 'ERROR',
-                desc:
-                mess,
+                desc: mess,
                 btnOkOnPress: () {},
                 btnOkColor: Colors.red,
               ).show();
@@ -146,35 +214,29 @@ class _MainScreenState extends State<MainScreen> {
               variables: {
                 "input": {"activityTypes": "CHECK_OUT"}
               },
-              onCompleted: (dynamic resultData) {
-                print(resultData);
-              },
+              onCompleted: (dynamic resultData) {},
             ));
             final productlist = result.data?['createActivity'];
             String? mess = productlist['message'];
-            if(result.data != null){
+            if (result.data != null) {
               AwesomeDialog(
                 context: context,
                 dialogType: DialogType.SUCCES,
                 animType: AnimType.RIGHSLIDE,
                 headerAnimationLoop: true,
-                title: 'CHECK OUT SUCCES',
-                desc:
-                mess,
+                title: 'CHECK OUT',
+                desc: mess,
                 btnOkOnPress: () {},
                 btnOkColor: Colors.green,
               ).show();
-
-            }else{
-
+            } else {
               AwesomeDialog(
                 context: context,
                 dialogType: DialogType.ERROR,
                 animType: AnimType.RIGHSLIDE,
                 headerAnimationLoop: true,
                 title: 'ERROR',
-                desc:
-                mess,
+                desc: mess,
                 btnOkOnPress: () {},
                 btnOkColor: Colors.red,
               ).show();
@@ -199,28 +261,25 @@ class _MainScreenState extends State<MainScreen> {
             ));
             final productlist = result.data?['createActivity'];
             String? mess = productlist['message'];
-            if(result.data != null){
+            if (result.data != null) {
               AwesomeDialog(
                 context: context,
                 dialogType: DialogType.SUCCES,
                 animType: AnimType.RIGHSLIDE,
                 headerAnimationLoop: true,
-                title: 'GO OUT SUCCES',
-                desc:
-                mess,
+                title: 'GO OUT',
+                desc: mess,
                 btnOkOnPress: () {},
                 btnOkColor: Colors.green,
               ).show();
-
-            }else{
+            } else {
               AwesomeDialog(
                 context: context,
                 dialogType: DialogType.ERROR,
                 animType: AnimType.RIGHSLIDE,
                 headerAnimationLoop: true,
                 title: 'ERROR',
-                desc:
-                mess,
+                desc: mess,
                 btnOkOnPress: () {},
                 btnOkColor: Colors.red,
               ).show();
@@ -245,29 +304,26 @@ class _MainScreenState extends State<MainScreen> {
             ));
             final productlist = result.data?['createActivity'];
             String? mess = productlist['message'];
-            print('messsss'+mess!);
-            if(result.data != null){
+            print('messsss' + mess!);
+            if (result.data != null) {
               AwesomeDialog(
                 context: context,
                 dialogType: DialogType.SUCCES,
                 animType: AnimType.RIGHSLIDE,
                 headerAnimationLoop: true,
-                title: 'COME BACK SUCCES',
-                desc:
-                mess,
+                title: 'COME BACK',
+                desc: mess,
                 btnOkOnPress: () {},
                 btnOkColor: Colors.green,
               ).show();
-
-            }else{
+            } else {
               AwesomeDialog(
                 context: context,
                 dialogType: DialogType.ERROR,
                 animType: AnimType.RIGHSLIDE,
                 headerAnimationLoop: true,
                 title: 'ERROR',
-                desc:
-                mess,
+                desc: mess,
                 btnOkOnPress: () {},
                 btnOkColor: Colors.red,
               ).show();

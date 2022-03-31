@@ -40,6 +40,7 @@ dependencies:
   flutter_feather_icons: ^2.0.0+1
   flutter_icons: ^1.1.0
   shared_preferences: ^2.0.6
+  fab_circular_menu: ^1.0.2
 
 
   # The following adds the Cupertino Icons font to your application.
