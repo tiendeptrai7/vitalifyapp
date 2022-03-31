@@ -21,7 +21,6 @@ ValueNotifier<GraphQLClient> clientAll = ValueNotifier(
       store: InMemoryStore(),
     ),
     link: AuthLink(getToken: () async {
-
       String token = await prefs.get(Preferences.auth_token);
       print(token);
       return "Bearer $token";
